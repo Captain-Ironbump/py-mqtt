@@ -29,4 +29,3 @@ class MQTTHeader(ctypes.Union):
     
     def __init__(self, package_type: str) -> None:
         self.bits.type = MQTTHeader._packet_types[package_type]
-        
