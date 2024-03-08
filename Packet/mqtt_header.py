@@ -1,8 +1,7 @@
 import ctypes 
-from pathlib import Path
 import sys
-path_root = Path(__file__).parents[2]
-sys.path.append(str(path_root))
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from mqtt_publish_flags import PUBLISH_FLAGS
 
