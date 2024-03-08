@@ -1,6 +1,6 @@
 import ctypes
 
-class CONNECT_BITS(ctypes.Structure):
+class ConnectBits(ctypes.Structure):
     _fields_ = [("reserved", ctypes.c_int, 1),
                   ("clean_session", ctypes.c_uint, 1),
                   ("will", ctypes.c_uint, 1),
@@ -9,7 +9,7 @@ class CONNECT_BITS(ctypes.Structure):
                   ("password", ctypes.c_uint, 1),
                   ("username", ctypes.c_uint, 1)]
     
-class CONNACK_BITS(ctypes.Structure):
+class ConnackBits(ctypes.Structure):
     _fields_ = [("session_present", ctypes.c_uint, 1),
                 ("reserved", ctypes.c_int, 7)]
     

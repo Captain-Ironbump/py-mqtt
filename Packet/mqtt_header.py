@@ -3,7 +3,7 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from mqtt_publish_flags import PUBLISH_FLAGS
+from mqtt_publish_flags import PunlishFlags
 
 class MQTTHeader(ctypes.Union):
     _packet_types = {
@@ -23,7 +23,7 @@ class MQTTHeader(ctypes.Union):
         'DISCONNECT': 14
     }
     _fields_ = [("byte", ctypes.c_uint8),
-                ("bits", PUBLISH_FLAGS)]
+                ("bits", PunlishFlags)]
     
     
     def __init__(self, package_type: str) -> None:
