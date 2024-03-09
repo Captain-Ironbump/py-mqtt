@@ -5,9 +5,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import unsure.mqtt_header as mqtt_header
 from packet.mqtt_factory import create_tuple_class
 
-
-class MqttSubscribe(ctypes.Structure):
+class MqttUnsubscribe(ctypes.Structure):
     _fields_ = [("header", mqtt_header.MQTTHeader),
                 ("packet_id", ctypes.c_ushort),
                 ("tuples_len", ctypes.c_ushort),
-                ("tuples", ctypes.POINTER(create_tuple_class('SUBSCRIBE')))]
+                ("tuples", ctypes.POINTER(create_tuple_class('UNSUBSCRIBE')))]
