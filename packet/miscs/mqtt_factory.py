@@ -1,7 +1,4 @@
 import ctypes
-import sys
-import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from typing import Type, TypeVar, Union, Tuple
 
 from packet.bit_classes.mqtt_packet_bits import *
