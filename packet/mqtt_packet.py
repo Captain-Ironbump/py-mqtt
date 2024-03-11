@@ -1,15 +1,16 @@
 import ctypes
 import miscs
+import mqtt_types
 
 class MqttPacket(ctypes.Union):
-    _fields_ = [("ack", miscs.MqttAck),
+    _fields_ = [("ack", mqtt_types.MqttAck),
                 ("header", miscs.MQTTHeader),
-                ("connect", miscs.MqttConnect),
-                ("connack", miscs.MqttConnack),
-                ("suback", miscs.MqttSuback),
-                ("publish", miscs.MqttPublish),
-                ("subscribe", miscs.MqttSubscribe),
-                ("unsubscribe", miscs.MqttUnsubscribe)]
+                ("connect", mqtt_types.MqttConnect),
+                ("connack", mqtt_types.MqttConnack),
+                ("suback", mqtt_types.MqttSuback),
+                ("publish", mqtt_types.MqttPublish),
+                ("subscribe", mqtt_types.MqttSubscribe),
+                ("unsubscribe", mqtt_types.MqttUnsubscribe)]
     _MAX_LEN_BYTES = 4
     
     def encode_lenght(self, length):
@@ -19,7 +20,7 @@ class MqttPacket(ctypes.Union):
             if bytes + 1 > MqttPacket._MAX_LEN_BYTES:
                 return buf[:bytes]
             d = length % 128
-            length //= 128
+            length /= 128
             if length > 0:
                 d |= 128
             buf[bytes] = d
