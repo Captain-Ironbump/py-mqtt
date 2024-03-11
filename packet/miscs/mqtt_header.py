@@ -18,10 +18,27 @@ class MqttFixedHeader():
         'DISCONNECT': 14
     }
 
-    def __init__(self, package_type: str, lenght=0, flags=0) -> None:
-        self.package_type = package_type if package_type in MqttFixedHeader._packet_types.keys() else None # x if x > y else y
+    _packet_type_flags = {
+        'CONNECT': 0,
+        'CONNACK': 0,
+        'PUBLISH': 0,
+        'PUBACK': 0,
+        'PUBREC': 0,
+        'PUBREL': 2,
+        'PUBCOMP': 0,
+        'SUBSCRIBE': 2,
+        'SUBACK': 0,
+        'UNSUBSCRIBE': 2,
+        'UNSUBACK': 0,
+        'PINGREQ': 0,
+        'PINGRESP': 0,
+        'DISCONNECT': 0
+    }
+
+    def __init__(self, package_type: str, lenght=0) -> None:
+        self.package_type = package_type if package_type in MqttFixedHeader._packet_type_flags.keys() else None # x if x > y else y
         self.remaining_length = lenght
-        self.flags = flags
+        self.flags = MqttFixedHeader._packet_type_flags[package_type]
         
 
 class MqttVariableHeader():
