@@ -32,17 +32,17 @@ class MqttFixedHeader():
         
 
 class MqttVariableHeader():
-    __packet_type_flags = {
-        'CONNECT': ('bits', 'keep_alive', 'client_id', 'username', 'password', 'will_topic', 'will_message'),
-        'CONNACK': ('bits', 'rc'),
-        'PUBLISH': ('topic_len', 'topic_ptr', 'packet_id'),
+    _packet_type_flags = {
+        'CONNECT': ('reserved', 'clean_session', 'will', 'will_qos', 'will_retain', 'username', 'password'),
+        'CONNACK': ('session_present', 'reserved'),
+        'PUBLISH': ('packet_id', 'topic_len', 'topic_ptr', 'payload_len', 'payload_ptr'),
         'PUBACK': ('packet_id',),
         'PUBREC': ('packet_id',),
         'PUBREL': ('packet_id',),
         'PUBCOMP': ('packet_id',),
-        'SUBSCRIBE': ('packet_id',),
-        'SUBACK': ('packet_id',),
-        'UNSUBSCRIBE': ('packet_id',),
+        'SUBSCRIBE': ('packet_id', 'tuples_len'),
+        'SUBACK': ('packet_id', 'rcs_len'),
+        'UNSUBSCRIBE': ('packet_id', 'tuples_len'),
         'UNSUBACK': ('packet_id',),
         'PINGREQ': (),
         'PINGRESP': (),
@@ -50,4 +50,5 @@ class MqttVariableHeader():
     }
     
     def __init__(self, package_type: str) -> None:
-        self.__slots__ = MqttVariableHeader.__packet_type_flags[package_type]
+        self.__slots__ = MqttVariableHeader._packet_type_flags[package_type]
+

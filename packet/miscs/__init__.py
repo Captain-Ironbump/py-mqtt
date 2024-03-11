@@ -1,2 +1,2 @@
 from miscs.mqtt_header import MqttFixedHeader, MqttVariableHeader
-from miscs.mqtt_factory import create_variable_header_class, create_payload_class, create_tuple_class
+from miscs.mqtt_factory import create_payload, create_tuples
