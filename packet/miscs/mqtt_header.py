@@ -1,7 +1,6 @@
-import ctypes 
-from mqtt_publish_flags import PublishFlags
+class MqttFixedHeader():
+    __slots__ = ('package_type', 'remaining_length', 'flags') # flags -> retein, qos, qos, dup -> 2^4
 
-class MQTTHeader(ctypes.Union):
     _packet_types = {
         'CONNECT': 1,
         'CONNACK': 2,
@@ -18,9 +17,13 @@ class MQTTHeader(ctypes.Union):
         'PINGRESP': 13,
         'DISCONNECT': 14
     }
-    _fields_ = [("byte", ctypes.c_uint8),
-                ("bits", PublishFlags)]
-    
-    
-    def __init__(self, package_type: str) -> None:
-        self.bits.type = MQTTHeader._packet_types[package_type]
+
+    def __init__(self, package_type: str, lenght=0, flags=0) -> None:
+        self.package_type = package_type if package_type in MqttFixedHeader._packet_types.keys() else None # x if x > y else y
+        self.remaining_length = lenght
+        self.flags = flags
+        
+
+class MqttVariableHeader():
+    def __init__(self) -> None:
+        pass
