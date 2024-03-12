@@ -1,3 +1,6 @@
+from mqtt_helper import encode_16bit_number
+import struct
+
 class MqttFixedHeader():
     __slots__ = ('package_type', 'remaining_length', 'flags') # flags -> retein, qos, qos, dup -> 2^4
 
@@ -29,6 +32,9 @@ class MqttFixedHeader():
             raise ValueError(f"Invalid package type: {package_type}")
         self.flags = MqttFixedHeader._packet_type_flags[package_type][1] if package_type != 'PUBLISH' else MqttFixedHeader._packet_type_flags[package_type]['AT_MOST_ONCE']
         self.remaining_length = lenght
+
+    def pack(self):
+        return struct.pack('!B', (self.package_type[1] << 4) | self.flags) + encode_16bit_number(self.remaining_length)
         
 
 class MqttVariableHeader():
@@ -52,3 +58,29 @@ class MqttVariableHeader():
     def __init__(self, package_type: str) -> None:
         self.__slots__ = MqttVariableHeader._packet_type_flags[package_type]
 
+
+class ConnectHeader(MqttFixedHeader):
+    __slots__ = ['protocol_name', 'protocol_level', 'connect_flags', 'keep_alive']
+    def __init__(self) -> None:
+        super().__init__('CONNECT')
+        self.protocol_name = 'MQTT'
+        self.protocol_level = bin(4)
+        self.connect_flags = {
+            'reserved': 0b0,
+            'clean_session': 0b1,
+            'will': 0b1,
+            'will_qos': 0b01,
+            'will_retain': 0b0,
+            'username': 0b1,
+            'password': 0b1
+        }
+        self.keep_alive = 10
+    
+    def pack_flags(self):
+        byte = 0b0
+        for i, (flag, value) in enumerate(self.connect_flags.items()):
+            byte |= value << i
+        return byte
+
+    def pack(self):
+        return super().pack() + encode_16bit_number(len(self.protocol_name)) + self.protocol_name.encode() + struct.pack('!B', self.protocol_level) + struct.pack('!B', self.pack_flags()) + encode_16bit_number(self.keep_alive)
